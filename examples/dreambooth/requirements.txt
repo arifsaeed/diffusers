@@ -5,3 +5,4 @@ transformers>=4.21.0
 ftfy
 tensorboard
 modelcards
+--upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib

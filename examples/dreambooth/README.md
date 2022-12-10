@@ -172,7 +172,7 @@ Pass the `--train_text_encoder` argument to the script to enable training `text_
 **_Note: Training text encoder requires more memory, with this option the training won't fit on 16GB GPU. It needs at least 24GB VRAM._**
 
 ```bash
-export MODEL_NAME="stabilityai/stable-diffusion-2"
+export MODEL_NAME="/workspace/diffusers/examples/dreambooth/output"
 export INSTANCE_DIR="/workspace/diffusers/examples/dreambooth/imagesbyinstance/wunzag"
 export INSTACE_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/wunzag"
 export CLASS_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/bear"
@@ -197,7 +197,7 @@ accelerate launch train_dreambooth.py \
   --lr_warmup_steps=0 \
   --num_class_images=180 \
   --max_train_steps=1200 \
-  --modeltoken='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'
+  --save_steps=1200
 ```
 
 ### Inference

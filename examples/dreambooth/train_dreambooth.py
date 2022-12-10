@@ -246,8 +246,6 @@ class DreamBoothDataset(Dataset):
         self.size = size
         self.center_crop = center_crop
         self.tokenizer = tokenizer
-        print("**********TOKENIZER MODEL MAX LENGTH*********************")
-        print(self.tokenizer.model_max_length)
 
         self.instance_data_root = Path(instance_data_root)
         if not self.instance_data_root.exists():
@@ -422,83 +420,29 @@ def main(args):
         tokenizer = CLIPTokenizer.from_pretrained(
             args.tokenizer_name,
             revision=args.revision,
-            use_auth_token=args.modeltoken,
         )
     elif args.pretrained_model_name_or_path:
         tokenizer = CLIPTokenizer.from_pretrained(
             args.pretrained_model_name_or_path,
             subfolder="tokenizer",
             revision=args.revision,
-            use_auth_token=args.modeltoken,
         )
-
-    train_dataset = DreamBoothDataset(
-        instance_data_root=args.instance_data_dir,
-        instance_prompt_file=args.instance_prompt,
-        class_data_root=args.class_data_dir if args.with_prior_preservation else None,
-        class_prompt_file=args.class_prompt,
-        tokenizer=tokenizer,
-        size=args.resolution,
-        center_crop=args.center_crop,
-    )
-
-    def collate_fn(examples):
-        input_ids = [example["instance_prompt_ids"] for example in examples]
-        pixel_values = [example["instance_images"] for example in examples]
-
-        # Concat class and instance examples for prior preservation.
-        # We do this to avoid doing two forward passes.
-        if args.with_prior_preservation:
-            input_ids += [example["class_prompt_ids"] for example in examples]
-            pixel_values += [example["class_images"] for example in examples]
-
-        pixel_values = torch.stack(pixel_values)
-        pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
-
-        input_ids = tokenizer.pad(
-            {"input_ids": input_ids},
-            padding="max_length",
-            max_length=tokenizer.model_max_length,
-            return_tensors="pt",
-        ).input_ids
-
-        batch = {
-            "input_ids": input_ids,
-            "pixel_values": pixel_values,
-        }
-        return batch
-
-    train_dataloader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=args.train_batch_size, shuffle=True, collate_fn=collate_fn, num_workers=1
-    )
-
-
-    for step, batch in enumerate(train_dataloader):
-        print(step)
-        print(batch)
-
-
-
-
 
     # Load models and create wrapper for stable diffusion
     text_encoder = CLIPTextModel.from_pretrained(
         args.pretrained_model_name_or_path,
         subfolder="text_encoder",
         revision=args.revision,
-        use_auth_token=args.modeltoken,
     )
     vae = AutoencoderKL.from_pretrained(
         args.pretrained_model_name_or_path,
         subfolder="vae",
         revision=args.revision,
-        use_auth_token=args.modeltoken,
     )
     unet = UNet2DConditionModel.from_pretrained(
         args.pretrained_model_name_or_path,
         subfolder="unet",
         revision=args.revision,
-        use_auth_token=args.modeltoken,
     )
 
     vae.requires_grad_(False)

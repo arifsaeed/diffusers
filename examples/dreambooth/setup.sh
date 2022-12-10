@@ -1,10 +1,11 @@
 git clone https://github.com/arifsaeed/diffusers.git
-pip install git+file:///home/ubuntu/diffusers#egg=diffusers
+pip install git+file:///workspace/diffusers#egg=diffusers
 pip install gdown
 cd diffusers/examples/dreambooth
 gdown 1tIKitYzkPXTvX9jzED4Yf0K-5EqHIcDL
 gdown 1zG7KcWos_D22N_qMAVKGdq2JYKOne390
 gdown 1jDi5_Hpy67n7l_wDo-x_4NuFMHg-CNBH
+pip install -U -r requirements.txt
 
 
 export MODEL_NAME="stabilityai/stable-diffusion-2"
@@ -12,7 +13,7 @@ export INSTANCE_DIR="/workspace/diffusers/examples/dreambooth/imagesbyinstance/w
 export INSTACE_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/wunzag"
 export CLASS_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/bear"
 export CLASS_DIR="/workspace/diffusers/examples/dreambooth/imagesbyclass/bear"
-export OUTPUT_DIR="/workspace/diffusers/examples/dreambooth//output"
+export OUTPUT_DIR="/workspace/diffusers/examples/dreambooth/output"
 
 
 accelerate launch train_dreambooth.py \
