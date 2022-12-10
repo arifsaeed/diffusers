@@ -6,9 +6,11 @@ from directories import *
 
 imgdirs=[extoferdir,eyorddir,gwaladir,hadacoddir,rawdibdir,renwadir,rigleldir,ungeradir,wunzagdir]
 imgprompts=["A cartoon image of extofer","A cartoon image of an eyord donkey","A cartoon image of a gwala owl","A cartoon image of a hadacod forest","A cartoon image of a rawdib rabbit","An image of renwa","A cartoon image of a riglel piglet","A cartoon image of an ungera kangaroo","A cartoon image of a wunzag bear"]
-promptpicklename='instanceprompts.pickle'
-#imgdirs=[beardir,boydir,donkeydir,forestdir,girldir,womandir,Kangaroodir,owldir,pigletdir,rabbitdir]
-#imgprompts=["A cartoon image of a bear","A cartoon image of a boy","A cartoon image of a donkey","A cartoon image of a forest","A cartoon image of a girl","An image of a woman","A cartoon image of a kangaroo","A cartoon image of an owl","A cartoon image of a piglet","A cartoon image of a rabbit"]
+promptpicklenames=['extofer','eyord','gwala','hadacod','rawdib','renwa','riglel','ungera','wunzag']
+#promptpicklename='instanceprompts.pickle'
+imgdirs=[beardir,boydir,donkeydir,forestdir,girldir,womandir,Kangaroodir,owldir,pigletdir,rabbitdir]
+imgprompts=["A cartoon image of a bear","A cartoon image of a boy","A cartoon image of a donkey","A cartoon image of a forest","A cartoon image of a girl","An image of a woman","A cartoon image of a kangaroo","A cartoon image of an owl","A cartoon image of a piglet","A cartoon image of a rabbit"]
+promptpicklenames=['bear','boy','donkey','forest','girl','woman','Kangaroo','owl','piglet','rabbit']
 #promptpicklename='classprompts.pickle'
 def get_prompts(promptsdir, filename):
     with open(promptsdir + '/' +filename , 'rb') as handle:
@@ -33,13 +35,20 @@ def create_promptfile(imageprompt,imgdir,promptdir,filename,loadfromdir=False):
 
 #create_promptfile(dir,promptsdir)
 
-def create_prompts():
+
+def create_class_prompts():
+    for idx in range(len(imgdirs)):
+        create_promptfile(imgprompts[idx],imgdirs[idx],promptsdir,promptpicklenames[idx],False)    
+
+
+
+def create_combined_prompts():
     create_promptfile(imgprompts[0],imgdirs[0],promptsdir,promptpicklename,False)
     for idx in range(1,len(imgdirs)):
         create_promptfile(imgprompts[idx],imgdirs[idx],promptsdir,promptpicklename,True)
 
-get_prompts(promptsdir,promptpicklename)
-#create_prompts()
+#get_prompts(promptsdir,promptpicklename)
+create_class_prompts()
 
 
 

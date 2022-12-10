@@ -5,9 +5,14 @@ The `train_dreambooth.py` script shows how to implement the training procedure a
 
 ## Running locally with PyTorch
 
+## cpunt records in folder
+ls | wc -l
+
 ### Installing the dependencies
-run !git install https://github.com/arifsaeed/diffusers.git
+git clone https://github.com/arifsaeed/diffusers.git
 pip install git+file:///workspace/diffusers#egg=diffusers
+
+
 Before running the scripts, make sure to install the library's training dependencies:
 
 ```bash
@@ -168,11 +173,11 @@ Pass the `--train_text_encoder` argument to the script to enable training `text_
 
 ```bash
 export MODEL_NAME="stabilityai/stable-diffusion-2"
-export INSTANCE_DIR="/home/arif/Documents/design/sandpit/arif_diffusers/diffusers/examples/dreambooth/allinstanceimages"
-export INSTACE_PROMPT_DIR="/home/arif/Documents/design/sandpit/arif_diffusers/diffusers/examples/dreambooth/prompts/instanceprompts.pickle"
-export CLASS_PROMPT_DIR="/home/arif/Documents/design/sandpit/arif_diffusers/diffusers/examples/dreambooth/prompts/classprompts.pickle"
-export CLASS_DIR="/home/arif/Documents/design/sandpit/arif_diffusers/diffusers/examples/dreambooth/allclassimages"
-export OUTPUT_DIR="/home/arif/Documents/design/sandpit/arif_diffusers/diffusers/examples/dreambooth/output"
+export INSTANCE_DIR="/workspace/diffusers/examples/dreambooth/imagesbyinstance/wunzag"
+export INSTACE_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/wunzag"
+export CLASS_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/bear"
+export CLASS_DIR="/workspace/diffusers/examples/dreambooth/imagesbyclass/bear"
+export OUTPUT_DIR="/workspace/diffusers/examples/dreambooth//output"
 
 
 accelerate launch train_dreambooth.py \
@@ -190,9 +195,9 @@ accelerate launch train_dreambooth.py \
   --learning_rate=2e-6 \
   --lr_scheduler="constant" \
   --lr_warmup_steps=0 \
-  --num_class_images=1732 \
-  --max_train_steps=800 \
-  --modeltoken='model token'
+  --num_class_images=180 \
+  --max_train_steps=1200 \
+  --modeltoken='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'
 ```
 
 ### Inference

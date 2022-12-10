@@ -3,7 +3,7 @@ import hashlib
 import itertools
 import math
 import os
-import pickle5 as pickle
+import pickle
 from pathlib import Path
 from typing import Optional
 import json
@@ -431,6 +431,54 @@ def main(args):
             revision=args.revision,
             use_auth_token=args.modeltoken,
         )
+
+    train_dataset = DreamBoothDataset(
+        instance_data_root=args.instance_data_dir,
+        instance_prompt_file=args.instance_prompt,
+        class_data_root=args.class_data_dir if args.with_prior_preservation else None,
+        class_prompt_file=args.class_prompt,
+        tokenizer=tokenizer,
+        size=args.resolution,
+        center_crop=args.center_crop,
+    )
+
+    def collate_fn(examples):
+        input_ids = [example["instance_prompt_ids"] for example in examples]
+        pixel_values = [example["instance_images"] for example in examples]
+
+        # Concat class and instance examples for prior preservation.
+        # We do this to avoid doing two forward passes.
+        if args.with_prior_preservation:
+            input_ids += [example["class_prompt_ids"] for example in examples]
+            pixel_values += [example["class_images"] for example in examples]
+
+        pixel_values = torch.stack(pixel_values)
+        pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
+
+        input_ids = tokenizer.pad(
+            {"input_ids": input_ids},
+            padding="max_length",
+            max_length=tokenizer.model_max_length,
+            return_tensors="pt",
+        ).input_ids
+
+        batch = {
+            "input_ids": input_ids,
+            "pixel_values": pixel_values,
+        }
+        return batch
+
+    train_dataloader = torch.utils.data.DataLoader(
+        train_dataset, batch_size=args.train_batch_size, shuffle=True, collate_fn=collate_fn, num_workers=1
+    )
+
+
+    for step, batch in enumerate(train_dataloader):
+        print(step)
+        print(batch)
+
+
+
 
 
     # Load models and create wrapper for stable diffusion
