@@ -2,9 +2,9 @@ git clone https://github.com/arifsaeed/diffusers.git
 pip install git+file:///workspace/diffusers#egg=diffusers
 pip install gdown
 cd diffusers/examples/dreambooth
-gdown 1tIKitYzkPXTvX9jzED4Yf0K-5EqHIcDL
-gdown 1zG7KcWos_D22N_qMAVKGdq2JYKOne390
 gdown 1jDi5_Hpy67n7l_wDo-x_4NuFMHg-CNBH
+gdown 1O9ytDeiWQ4_mSteSGEIEykcvYSJKkaQh
+gdown 126IyPjNKD2Fr3Ar0gd24RU5Ll9Y7P3Qa
 pip install -U -r requirements.txt
 
 

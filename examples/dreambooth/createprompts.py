@@ -4,13 +4,17 @@ import pickle
 from directories import *
 
 
-imgdirs=[extoferdir,eyorddir,gwaladir,hadacoddir,rawdibdir,renwadir,rigleldir,ungeradir,wunzagdir]
-imgprompts=["A cartoon image of extofer","A cartoon image of an eyord donkey","A cartoon image of a gwala owl","A cartoon image of a hadacod forest","A cartoon image of a rawdib rabbit","An image of renwa","A cartoon image of a riglel piglet","A cartoon image of an ungera kangaroo","A cartoon image of a wunzag bear"]
-promptpicklenames=['extofer','eyord','gwala','hadacod','rawdib','renwa','riglel','ungera','wunzag']
+imgdirs=[hadacoddir,wunzagdir]
+imgprompts=["A cartoon image of a hadacod forest","A cartoon image of a wunzag bear in a hadacod forest"]
+promptpicklenames=['hadacodforest','wunzagwithHadacod']
 #promptpicklename='instanceprompts.pickle'
-imgdirs=[beardir,boydir,donkeydir,forestdir,girldir,womandir,Kangaroodir,owldir,pigletdir,rabbitdir]
-imgprompts=["A cartoon image of a bear","A cartoon image of a boy","A cartoon image of a donkey","A cartoon image of a forest","A cartoon image of a girl","An image of a woman","A cartoon image of a kangaroo","A cartoon image of an owl","A cartoon image of a piglet","A cartoon image of a rabbit"]
-promptpicklenames=['bear','boy','donkey','forest','girl','woman','Kangaroo','owl','piglet','rabbit']
+#imgdirs=[beardir,boydir,donkeydir,forestdir,girldir,womandir,Kangaroodir,owldir,pigletdir,rabbitdir]
+#imgprompts=["A cartoon image of a bear","A cartoon image of a boy","A cartoon image of a donkey","A cartoon image of a forest","A cartoon image of a girl","An image of a woman","A cartoon image of a kangaroo","A cartoon image of an owl","A cartoon image of a piglet","A cartoon image of a rabbit"]
+#promptpicklenames=['bear','boy','donkey','forest','girl','woman','Kangaroo','owl','piglet','rabbit']
+
+#imgdirs=[beardir,boydir,donkeydir,forestdir,girldir,womandir,Kangaroodir,owldir,pigletdir,rabbitdir]
+#imgprompts=["A cartoon image of a bear","A cartoon image of a boy","A cartoon image of a donkey","A cartoon image of a forest","A cartoon image of a girl","An image of a woman","A cartoon image of a kangaroo","A cartoon image of an owl","A cartoon image of a piglet","A cartoon image of a rabbit"]
+
 #promptpicklename='classprompts.pickle'
 def get_prompts(promptsdir, filename):
     with open(promptsdir + '/' +filename , 'rb') as handle:
@@ -36,7 +40,7 @@ def create_promptfile(imageprompt,imgdir,promptdir,filename,loadfromdir=False):
 #create_promptfile(dir,promptsdir)
 
 
-def create_class_prompts():
+def create_prompts():
     for idx in range(len(imgdirs)):
         create_promptfile(imgprompts[idx],imgdirs[idx],promptsdir,promptpicklenames[idx],False)    
 
@@ -48,7 +52,7 @@ def create_combined_prompts():
         create_promptfile(imgprompts[idx],imgdirs[idx],promptsdir,promptpicklename,True)
 
 #get_prompts(promptsdir,promptpicklename)
-create_class_prompts()
+create_prompts()
 
 
 

@@ -8,6 +8,17 @@ The `train_dreambooth.py` script shows how to implement the training procedure a
 ## cpunt records in folder
 ls | wc -l
 
+
+### unzip from python
+import zipfile
+with zipfile.ZipFile("/workspace/diffusers/examples/dreambooth/prompts.zip","r") as zip_ref:
+    zip_ref.extractall("/workspace/diffusers/examples/dreambooth")
+with zipfile.ZipFile("/workspace/diffusers/examples/dreambooth/allclassimages.zip","r") as zip_ref:
+    zip_ref.extractall("/workspace/diffusers/examples/dreambooth")
+with zipfile.ZipFile("/workspace/diffusers/examples/dreambooth/allinstanceimages.zip","r") as zip_ref:
+    zip_ref.extractall("/workspace/diffusers/examples/dreambooth")
+with zipfile.ZipFile("/workspace/diffusers/examples/dreambooth/trained.zip","r") as zip_ref:
+    zip_ref.extractall("/workspace/diffusers/examples/dreambooth")
 ### Installing the dependencies
 git clone https://github.com/arifsaeed/diffusers.git
 pip install git+file:///workspace/diffusers#egg=diffusers
@@ -172,12 +183,12 @@ Pass the `--train_text_encoder` argument to the script to enable training `text_
 **_Note: Training text encoder requires more memory, with this option the training won't fit on 16GB GPU. It needs at least 24GB VRAM._**
 
 ```bash
-export MODEL_NAME="/workspace/diffusers/examples/dreambooth/output"
-export INSTANCE_DIR="/workspace/diffusers/examples/dreambooth/imagesbyinstance/wunzag"
-export INSTACE_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/wunzag"
-export CLASS_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/bear"
-export CLASS_DIR="/workspace/diffusers/examples/dreambooth/imagesbyclass/bear"
-export OUTPUT_DIR="/workspace/diffusers/examples/dreambooth//output"
+export MODEL_NAME="/workspace/diffusers/examples/dreambooth/trained"
+export INSTANCE_DIR="/workspace/diffusers/examples/dreambooth/allinstanceimages"
+export INSTACE_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/instanceprompts.pickle"
+export CLASS_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/classprompts.pickle"
+export CLASS_DIR="/workspace/diffusers/examples/dreambooth/allclassimages"
+export OUTPUT_DIR="/workspace/diffusers/examples/dreambooth/output"
 
 
 accelerate launch train_dreambooth.py \
@@ -195,9 +206,9 @@ accelerate launch train_dreambooth.py \
   --learning_rate=2e-6 \
   --lr_scheduler="constant" \
   --lr_warmup_steps=0 \
-  --num_class_images=180 \
-  --max_train_steps=1200 \
-  --save_steps=1200
+  --num_class_images=1732 \
+  --max_train_steps=16000 \
+  --save_steps=8002
 ```
 
 ### Inference
