@@ -184,6 +184,7 @@ Pass the `--train_text_encoder` argument to the script to enable training `text_
 
 ```bash
 export MODEL_NAME="/workspace/diffusers/examples/dreambooth/trained"
+export MODEL_NAME="stabilityai/stable-diffusion-2"
 export INSTANCE_DIR="/workspace/diffusers/examples/dreambooth/allinstanceimages"
 export INSTACE_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/instanceprompts.pickle"
 export CLASS_PROMPT_DIR="/workspace/diffusers/examples/dreambooth/prompts/classprompts.pickle"
@@ -206,9 +207,9 @@ accelerate launch train_dreambooth.py \
   --learning_rate=2e-6 \
   --lr_scheduler="constant" \
   --lr_warmup_steps=0 \
-  --num_class_images=1732 \
-  --max_train_steps=16000 \
-  --save_steps=8002
+  --num_class_images=180 \
+  --max_train_steps=3000 \
+  --save_steps=1200
 ```
 
 ### Inference
