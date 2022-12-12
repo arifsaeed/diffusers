@@ -73,60 +73,6 @@ class VersatileDiffusionImageVariationPipeline(DiffusionPipeline):
         )
         self.vae_scale_factor = 2 ** (len(self.vae.config.block_out_channels) - 1)
 
-    # Copied from diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline.enable_xformers_memory_efficient_attention with unet->image_unet
-    def enable_xformers_memory_efficient_attention(self):
-        r"""
-        Enable memory efficient attention as implemented in xformers.
-
-        When this option is enabled, you should observe lower GPU memory usage and a potential speed up at inference
-        time. Speed up at training time is not guaranteed.
-
-        Warning: When Memory Efficient Attention and Sliced attention are both enabled, the Memory Efficient Attention
-        is used.
-        """
-        self.image_unet.set_use_memory_efficient_attention_xformers(True)
-
-    # Copied from diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline.disable_xformers_memory_efficient_attention with unet->image_unet
-    def disable_xformers_memory_efficient_attention(self):
-        r"""
-        Disable memory efficient attention as implemented in xformers.
-        """
-        self.image_unet.set_use_memory_efficient_attention_xformers(False)
-
-    # Copied from diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline.enable_attention_slicing with unet->image_unet
-    def enable_attention_slicing(self, slice_size: Optional[Union[str, int]] = "auto"):
-        r"""
-        Enable sliced attention computation.
-
-        When this option is enabled, the attention module will split the input tensor in slices, to compute attention
-        in several steps. This is useful to save some memory in exchange for a small speed decrease.
-
-        Args:
-            slice_size (`str` or `int`, *optional*, defaults to `"auto"`):
-                When `"auto"`, halves the input to the attention heads, so attention will be computed in two steps. If
-                a number is provided, uses as many slices as `attention_head_dim // slice_size`. In this case,
-                `attention_head_dim` must be a multiple of `slice_size`.
-        """
-        if slice_size == "auto":
-            if isinstance(self.image_unet.config.attention_head_dim, int):
-                # half the attention head size is usually a good trade-off between
-                # speed and memory
-                slice_size = self.image_unet.config.attention_head_dim // 2
-            else:
-                # if `attention_head_dim` is a list, take the smallest head size
-                slice_size = min(self.image_unet.config.attention_head_dim)
-
-        self.image_unet.set_attention_slice(slice_size)
-
-    # Copied from diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline.disable_attention_slicing
-    def disable_attention_slicing(self):
-        r"""
-        Disable sliced attention computation. If `enable_attention_slicing` was previously invoked, this method will go
-        back to computing attention in one step.
-        """
-        # set slice_size = `None` to disable `attention slicing`
-        self.enable_attention_slicing(None)
-
     def enable_sequential_cpu_offload(self, gpu_id=0):
         r"""
         Offloads all models to CPU using accelerate, significantly reducing memory usage. When called, unet,
@@ -187,6 +133,9 @@ class VersatileDiffusionImageVariationPipeline(DiffusionPipeline):
             embeds_pooled = embeds[:, 0:1]
             embeds = embeds / torch.norm(embeds_pooled, dim=-1, keepdim=True)
             return embeds
+
+        if isinstance(prompt, torch.Tensor) and len(prompt.shape) == 4:
+            prompt = [p for p in prompt]
 
         batch_size = len(prompt) if isinstance(prompt, list) else 1
 
@@ -266,9 +215,17 @@ class VersatileDiffusionImageVariationPipeline(DiffusionPipeline):
             extra_step_kwargs["generator"] = generator
         return extra_step_kwargs
 
+    # Copied from diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion_image_variation.StableDiffusionImageVariationPipeline.check_inputs
     def check_inputs(self, image, height, width, callback_steps):
-        if not isinstance(image, PIL.Image.Image) and not isinstance(image, torch.Tensor):
-            raise ValueError(f"`image` has to be of type `PIL.Image.Image` or `torch.Tensor` but is {type(image)}")
+        if (
+            not isinstance(image, torch.Tensor)
+            and not isinstance(image, PIL.Image.Image)
+            and not isinstance(image, list)
+        ):
+            raise ValueError(
+                "`image` has to be of type `torch.FloatTensor` or `PIL.Image.Image` or `List[PIL.Image.Image]` but is"
+                f" {type(image)}"
+            )
 
         if height % 8 != 0 or width % 8 != 0:
             raise ValueError(f"`height` and `width` have to be divisible by 8 but are {height} and {width}.")
