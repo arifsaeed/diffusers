@@ -11,7 +11,7 @@ girldir='/home/arif/Documents/design/sandpit/classimages/girl'
 womandir='/home/arif/Documents/design/sandpit/classimages/imageswoman'
 promptsdir='/home/arif/Documents/design/sandpit/prompts'
 all_imges='/home/arif/Documents/design/sandpit/classimages/allimages'
-
+woman21='/home/arif/Documents/design/sandpit/images2.1/woman'
 
 
 gwaladir='/home/arif/Documents/design/sandpit/instanceImages/gwala'

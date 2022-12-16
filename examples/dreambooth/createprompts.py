@@ -4,9 +4,9 @@ import pickle
 from directories import *
 
 
-imgdirs=[hadacoddir,wunzagdir]
-imgprompts=["A cartoon image of a hadacod forest","A cartoon image of a wunzag bear in a hadacod forest"]
-promptpicklenames=['hadacodforest','wunzagwithHadacod']
+imgdirs=[woman21]
+imgprompts=["An image of a woman"]
+promptpicklenames=['woman21']
 #promptpicklename='instanceprompts.pickle'
 #imgdirs=[beardir,boydir,donkeydir,forestdir,girldir,womandir,Kangaroodir,owldir,pigletdir,rabbitdir]
 #imgprompts=["A cartoon image of a bear","A cartoon image of a boy","A cartoon image of a donkey","A cartoon image of a forest","A cartoon image of a girl","An image of a woman","A cartoon image of a kangaroo","A cartoon image of an owl","A cartoon image of a piglet","A cartoon image of a rabbit"]

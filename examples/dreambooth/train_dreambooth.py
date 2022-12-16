@@ -470,7 +470,7 @@ def main(args):
         tokenizer = AutoTokenizer.from_pretrained(
             args.tokenizer_name,
             revision=args.revision,
-            use_auth_token=args.token,
+            use_auth_token=args.modeltoken,
             use_fast=False,
         )
     elif args.pretrained_model_name_or_path:
@@ -478,7 +478,7 @@ def main(args):
             args.pretrained_model_name_or_path,
             subfolder="tokenizer",
             revision=args.revision,
-            use_auth_token=args.token,
+            use_auth_token=args.modeltoken,
             use_fast=False,
         )
 
@@ -490,19 +490,19 @@ def main(args):
         args.pretrained_model_name_or_path,
         subfolder="text_encoder",
         revision=args.revision,
-        use_auth_token=args.token
+        use_auth_token=args.modeltoken
     )
     vae = AutoencoderKL.from_pretrained(
         args.pretrained_model_name_or_path,
         subfolder="vae",
         revision=args.revision,
-        use_auth_token=args.token
+        use_auth_token=args.modeltoken
     )
     unet = UNet2DConditionModel.from_pretrained(
         args.pretrained_model_name_or_path,
         subfolder="unet",
         revision=args.revision,
-        use_auth_token=args.token
+        use_auth_token=args.modeltoken
     )
 
     if is_xformers_available():
